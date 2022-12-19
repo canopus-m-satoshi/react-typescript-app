@@ -12,7 +12,29 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
+
+import { IFacility } from '../models/IFacility';
+
+const initFacility: IFacility = {
+  id: '',
+  name: 'name の初期値',
+  note: 'note の初期値',
+  system: {
+    createDate: new Date(),
+    createUser: {
+      displayName: 'ebihara kenji',
+      email: '',
+      face: 'https://bit.ly/3pM3urc',
+    },
+    lastUpdateUser: {
+      displayName: 'ebihara kenji',
+      email: '',
+      face: 'https://bit.ly/3pM3urc',
+    },
+    lastUpdate: new Date(),
+  },
+};
 
 const RootContainer = styled(Container)(({ theme }) => ({
   '& .MuiTextField-root': {
@@ -33,29 +55,45 @@ const SaveButton = styled(Button)(() => ({
 }));
 
 const Facility: React.FC = () => {
+  const [facility, setFacility] = useState(initFacility);
+  const { system } = initFacility;
+
+  const onNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newFacility: IFacility = {
+        ...facility,
+        name: e.target.value,
+      };
+
+      setFacility(newFacility);
+    },
+    [facility],
+  );
+
   return (
     <RootContainer maxWidth="sm">
       <PpaperForm>
-        <TextField label="設備名" fullWidth />
-        <TextField label="詳細" fullWidth multiline />
+        <TextField
+          label="設備名"
+          fullWidth
+          value={facility.name}
+          onChange={onNameChange}
+        />
+        <TextField label="詳細" fullWidth multiline value={facility.note} />
         <InputLabel shrink>登録者</InputLabel>
         <p>
           <Chip
-            label="登録者"
-            avatar={
-              <Avatar src="https://avatars.githubusercontent.com/u/58695418?v=4" />
-            }
+            label={system.createUser.displayName}
+            avatar={<Avatar src={system.createUser.face} />}
           />
-          {dayjs(new Date()).format('YYYY-MM-DD HH:mm')}
+          {dayjs(system.createDate).format('YYYY-MM-DD HH:mm')}
         </p>
         <p>
           <Chip
-            label="更新者"
-            avatar={
-              <Avatar src="https://avatars.githubusercontent.com/u/58695418?v=4" />
-            }
+            label={system.lastUpdateUser.displayName}
+            avatar={<Avatar src={system.lastUpdateUser.face} />}
           />
-          {dayjs(new Date()).format('YYYY-MM-DD HH:mm')}
+          {dayjs(system.lastUpdate).format('YYYY-MM-DD HH:mm')}
         </p>
 
         <Grid container>
