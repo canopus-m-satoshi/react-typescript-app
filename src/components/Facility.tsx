@@ -9,7 +9,6 @@ import {
   InputLabel,
   Paper,
   TextField,
-  Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
@@ -30,10 +29,6 @@ const CancelButton = styled(Button)(({ theme }) => ({
 }));
 
 const SaveButton = styled(Button)(() => ({
-  textAlign: 'right',
-}));
-
-const AlignRight = styled(Typography)(() => ({
   textAlign: 'right',
 }));
 
@@ -67,16 +62,14 @@ const Facility: React.FC = () => {
           <Grid item xs={6}>
             <CancelButton startIcon={<ClearIcon />}>削除</CancelButton>
           </Grid>
-          <Grid item xs={6}>
-            <AlignRight>
-              <SaveButton
-                variant="contained"
-                color="primary"
-                startIcon={<CheckIcon />}
-              >
-                保存
-              </SaveButton>
-            </AlignRight>
+          <Grid item xs={6} sx={{ textAlign: 'right' }}>
+            <SaveButton
+              variant="contained"
+              color="primary"
+              startIcon={<CheckIcon />}
+            >
+              保存
+            </SaveButton>
           </Grid>
         </Grid>
       </PpaperForm>
