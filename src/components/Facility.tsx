@@ -12,7 +12,8 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import dayjs from 'dayjs';
-import React, { ChangeEvent, useCallback, useState } from 'react';
+import React, { useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import { IFacility } from '../models/IFacility';
 
@@ -36,50 +37,41 @@ const initFacility: IFacility = {
   },
 };
 
-const RootContainer = styled(Container)(({ theme }) => ({
-  '& .MuiTextField-root': {
-    margin: theme.spacing(1),
-  },
-}));
-
-const PpaperForm = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(1),
-}));
-
-const CancelButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.error.main,
-}));
-
-const SaveButton = styled(Button)(() => ({
-  textAlign: 'right',
-}));
-
 const Facility: React.FC = () => {
   const [facility, setFacility] = useState(initFacility);
   const { system } = initFacility;
-
-  const onNameChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const newFacility: IFacility = {
-        ...facility,
-        name: e.target.value,
-      };
-
-      setFacility(newFacility);
-    },
-    [facility],
-  );
+  const {
+    control,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initFacility,
+    mode: 'onBlur',
+  });
 
   return (
     <RootContainer maxWidth="sm">
       <PpaperForm>
-        <TextField
-          label="設備名"
-          fullWidth
-          value={facility.name}
-          onChange={onNameChange}
+        <Controller
+          control={control}
+          name="name"
+          rules={{ required: true }}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              label="設備名"
+              fullWidth
+              error={errors.name !== undefined}
+              helperText={errors ? '必須です' : ''}
+            />
+          )}
         />
-        <TextField label="詳細" fullWidth multiline value={facility.note} />
+        <Controller
+          control={control}
+          name="note"
+          render={({ field }) => (
+            <TextField {...field} label="詳細" fullWidth multiline />
+          )}
+        />
         <InputLabel shrink>登録者</InputLabel>
         <p>
           <Chip
@@ -115,3 +107,21 @@ const Facility: React.FC = () => {
   );
 };
 export default Facility;
+
+const RootContainer = styled(Container)(({ theme }) => ({
+  '& .MuiTextField-root': {
+    margin: theme.spacing(1),
+  },
+}));
+
+const PpaperForm = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(1),
+}));
+
+const CancelButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.error.main,
+}));
+
+const SaveButton = styled(Button)(() => ({
+  textAlign: 'right',
+}));
