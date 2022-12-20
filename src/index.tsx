@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDom from 'react-dom';
 
-ReactDom.render(
-  <div>Hello React World!!</div>,
-  document.getElementById('container'),
-);
+import Facility from '../src/components/Facility';
+
+ReactDom.render(<Facility />, document.getElementById('container'));
