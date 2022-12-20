@@ -45,6 +45,7 @@
         "varsIgnorePattern": "^_"
       }
     ],
+    "import/no-unresolved": "off",
     "prettier/prettier": ["error"]
   }
 }
